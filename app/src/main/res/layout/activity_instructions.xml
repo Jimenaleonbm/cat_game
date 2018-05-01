@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="10dp"
         android:paddingHorizontal="30dp"
-        android:text="Alimenta al gato con la mayor cantidad de peces posible."
+        android:text="Alimenta al gato con la mayor cantidad de peces posibles. "
         android:textAlignment="center"
         android:textSize="16sp"/>
 
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="40dp">
 
         <ImageView
             android:layout_width="30dp"
@@ -79,7 +79,30 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentTop="true"
-            android:src="@drawable/fish_dead"
+            android:src="@drawable/mouse"
+            android:id="@+id/imageView4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/imageView4"
+            android:text="Puntaje: 30"
+            android:paddingLeft="10dp"
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/broc"
             android:id="@+id/imageView3" />
 
         <TextView
@@ -93,10 +116,11 @@
     </RelativeLayout>
 
     <TextView
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="Ingrese su nombre"/>
+        android:text="Ingresa tu nombre"/>
 
     <EditText
         android:id="@+id/name"

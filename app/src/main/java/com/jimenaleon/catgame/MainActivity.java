@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -25,14 +26,21 @@ public class MainActivity extends AppCompatActivity {
     private ImageView cat;
     private ImageView fishYellow;
     private ImageView fishBlue;
-    private ImageView fishDead;
+    private ImageView broc;
+    private ImageView mouse;
     private int posX;
     private int fishYellowX;
     private int fishYellowY;
     private int fishBlueX;
     private int fishBlueY;
-    private int fishDeadX;
-    private int fishDeadY;
+    private int brocX;
+    private int brocY;
+    private int mouseX;
+    private int mouseY;
+    int speed1;
+    int speed2;
+    int speed3;
+    int speed4;
 
     private Handler handler = new Handler();
     private Timer timer = new Timer();
@@ -63,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
         cat = (ImageView) findViewById(R.id.cat);
         fishYellow = (ImageView) findViewById(R.id.fishYellow);
         fishBlue = (ImageView) findViewById(R.id.fishBlue);
-        fishDead = (ImageView) findViewById(R.id.fishDead);
+        broc = (ImageView) findViewById(R.id.broc);
+        mouse = (ImageView) findViewById(R.id.mouse);
 
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
@@ -72,22 +81,43 @@ public class MainActivity extends AppCompatActivity {
         screenWidth = size.x;
         screenHeight = size.y;
 
-        fishYellow.setX(-100);
+        fishYellow.setX(100);
         fishYellow.setY(screenHeight + 100);
-        fishBlue.setX(-300);
+        fishBlue.setX(300);
         fishBlue.setY(screenHeight + 100);
-        fishDead.setX(-150);
-        fishDead.setY(screenHeight + 100);
+        broc.setX(150);
+        broc.setY(screenHeight + 100);
+        mouse.setX(150);
+        mouse.setY(screenHeight + 100);
 
         scoreLabel.setText("Puntaje: 0");
     }
 
+    public int chagenSpeed(int speed){
+        if(score < 50){
+            speed = (int) (speed * 1.6);
+        }else if(score >= 50 && score <= 100){
+            speed = (int) (speed * 2.1);
+        }else if(score > 100 && score <= 400){
+            speed = (int) (speed * 2.8);
+        }else if(score > 400){
+            speed = (int) (speed * 3.5);
+        }
+
+        return speed;
+    }
+
     public void changePos(){
+
+        speed1 = chagenSpeed(10);
+        speed2 = chagenSpeed(9);
+        speed3 = chagenSpeed(12);
+        speed4 = chagenSpeed(11);
 
         hitCheck();
 
         // yellow
-        fishYellowY += 22;
+        fishYellowY += speed1;
         if(fishYellowY > screenHeight){
             fishYellowY = 0;
             fishYellowX = (int) Math.floor(Math.random() * (frameWidth - fishYellow.getWidth()));
@@ -95,17 +125,17 @@ public class MainActivity extends AppCompatActivity {
         fishYellow.setX(fishYellowX);
         fishYellow.setY(fishYellowY);
 
-        // dead
-        fishDeadY += 28;
-        if(fishDeadY > screenHeight){
-            fishDeadY = 0;
-            fishDeadX = (int) Math.floor(Math.random() * (frameWidth - fishDead.getWidth()));
+        // brocoli
+        brocY += speed3;
+        if(brocY > screenHeight){
+            brocY = 0;
+            brocX = (int) Math.floor(Math.random() * (frameWidth - broc.getWidth()));
         }
-        fishDead.setX(fishDeadX);
-        fishDead.setY(fishDeadY);
+        broc.setX(brocX);
+        broc.setY(brocY);
 
         // blue
-        fishBlueY += 35;
+        fishBlueY += speed2;
         if(fishBlueY > screenHeight){
             fishBlueY = -3530;
             fishBlueX = (int) Math.floor(Math.random() * (frameWidth - fishBlue.getWidth()));
@@ -113,12 +143,22 @@ public class MainActivity extends AppCompatActivity {
         fishBlue.setX(fishBlueX);
         fishBlue.setY(fishBlueY);
 
+        // mouse
+        mouseY += speed4;
+        if(mouseY > screenHeight){
+            mouseY = -6521;
+            mouseX = (int) Math.floor(Math.random() * (frameWidth - mouse.getWidth()));
+        }
+        mouse.setX(mouseX);
+        mouse.setY(mouseY);
 
+        /*
         if(action_flg){
             posX -= 20;
         }else{
             posX += 20;
         }
+        */
 
         if(posX < 0) posX = 0;
         if(posX > frameWidth - catWidth) posX = frameWidth - catWidth;
@@ -130,39 +170,59 @@ public class MainActivity extends AppCompatActivity {
     public void hitCheck(){
 
         // yellow
+
         int fishYellowCenterX = fishYellowX + fishYellow.getWidth() / 2;
         int fishYellowCenterY = fishYellowY + fishYellow.getHeight() / 2;
 
-        if(screenHeight - cat.getHeight() <= fishYellowCenterY + fishYellow.getHeight()
-                && fishYellowY >= cat.getHeight() && posX <= fishYellowCenterX && fishYellowCenterX <= posX + catWidth){
-            fishYellowY = screenHeight + 30;
-            score += 15;
+        if(posX <= fishYellowCenterX && fishYellowCenterX <= posX + catWidth
+                && fishYellowCenterY >= cat.getY() &&
+                fishYellowY + fishYellow.getHeight() < cat.getY() + cat.getHeight()) {
+
+                fishYellowY = screenHeight + 30;
+                score += 15;
         }
 
         //blue
+
         int fishBlueCenterX = fishBlueX + fishBlue.getWidth() / 2;
         int fishBlueCenterY = fishBlueY + fishBlue.getHeight() / 2;
 
-        if(screenHeight - cat.getHeight() <= fishBlueCenterY + fishBlue.getHeight()
-                && fishBlueY >= cat.getHeight() && posX <= fishBlueCenterX && fishBlueCenterX <= posX + catWidth){
+        if(posX <= fishBlueCenterX && fishBlueCenterX <= posX + catWidth
+                && fishBlueCenterY >= cat.getY() &&
+                fishBlueY + fishBlue.getHeight() < cat.getY() + cat.getHeight()) {
 
-            fishBlueY = screenHeight + 20;
+            fishBlueY = screenHeight + 0;
             score += 10;
         }
 
-        // dead
-        int fishDeadCenterX = fishDeadX + fishDead.getWidth() / 2;
-        int fishDeadCenterY = fishDeadY + fishDead.getHeight() / 2;
 
-        if(screenHeight - cat.getHeight() <= fishDeadCenterY + fishDead.getHeight()
-                && fishDeadY >= cat.getHeight() && posX <= fishDeadCenterX && fishDeadCenterX <= posX + catWidth){
+        // broc
+        int brocCenterX = brocX + broc.getWidth() / 2;
+        int brocCenterY = brocY + broc.getHeight() / 2;
 
-            //fishDeadY = screenHeight + 10;
-            //score -= 10;
+        if(posX <= brocCenterX && brocCenterX <= posX + catWidth
+                && brocCenterY >= cat.getY() &&
+                brocY + broc.getHeight() < cat.getY() + cat.getHeight()){
+
             timer.cancel();
             timer = null;
             goToFinish();
         }
+
+
+        // mouse
+
+        int mouseCenterX = mouseX + mouse.getWidth() / 2;
+        int mouseCenterY = mouseY + mouse.getHeight() / 2;
+
+        if(posX <= mouseCenterX && mouseCenterX <= posX + catWidth
+                && mouseCenterY >= cat.getY() &&
+                mouseY + mouse.getHeight() < cat.getY() + cat.getHeight()) {
+
+            mouseY = screenHeight + 20;
+            score += 30;
+        }
+
 
     }
 
@@ -196,11 +256,32 @@ public class MainActivity extends AppCompatActivity {
             }, 0, 20);
 
         }else{
+
+            switch (motionEvent.getAction()){
+
+                case MotionEvent.ACTION_DOWN:
+                    posX = (int) motionEvent.getX() - (catWidth / 2);
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+                    posX = (int) motionEvent.getX() - (catWidth / 2);
+                    break;
+            }
+
+            /*
             if(motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+
+
+
+
                 action_flg = true;
             }else if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+
+
+                posX = 20;
                 action_flg = false;
             }
+            */
         }
         return true;
     }
